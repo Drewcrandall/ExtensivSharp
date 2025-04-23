@@ -4,7 +4,8 @@ using System.Text;
 
 namespace ExtensivSharp.Services
 {
-    class Order
+    public class OrderService
     {
+
     }
 }
