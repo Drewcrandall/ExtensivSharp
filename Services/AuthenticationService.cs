@@ -1,4 +1,5 @@
 ﻿using ExtensivSharp.Models.Auth;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,7 @@ namespace ExtensivSharp.Services
 {
     public class AuthenticationService
     {
-        public static async Task<AuthResponse?> GetAuthenticationKey(AuthRequest request)
+        public static async Task<ExtensivAuthResponse?> GetAuthenticationKey(ExtensivAuthRequest request)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -42,7 +43,8 @@ namespace ExtensivSharp.Services
 
                 //retrun a response
                 var responseJson = await response.Content.ReadAsStringAsync();
-                return System.Text.Json.JsonSerializer.Deserialize<AuthResponse>(responseJson);
+                var responseObject = JsonConvert.DeserializeObject<ExtensivAuthResponse>(responseJson);
+                return responseObject;
             }
         }
     }

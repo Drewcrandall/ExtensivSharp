@@ -4,12 +4,12 @@ using System.Text;
 
 namespace ExtensivSharp.Models.Auth
 {
-    public class AuthRequest
+    public class ExtensivAuthRequest
     {
         private string _clientId;
         private string _clientSecret;
 
-        public AuthRequest(string clientId, string clientSecret, string userId)
+        public ExtensivAuthRequest(string clientId, string clientSecret, string userId)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
@@ -42,7 +42,7 @@ namespace ExtensivSharp.Models.Auth
 
         private string GenerateKey()
         {
-            return $"{_clientId}:{_clientSecret}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_clientId}:{_clientSecret}"));
         }
     }
 }
