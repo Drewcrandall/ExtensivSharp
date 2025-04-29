@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExtensivSharp.Models.Orders
+namespace ExtensivSharp.Models.Order
 {
-    class Orders
+#pragma warning disable CS8618
+    public class Orders
     {
         [JsonProperty("totalResults")]
         public int TotalResults { get; set; }

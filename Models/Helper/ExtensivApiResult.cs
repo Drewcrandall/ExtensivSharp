@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace ExtensivSharp.Entities
+namespace ExtensivSharp.Models.Helper
 {
     public class ExtensivApiResult<T>
     {

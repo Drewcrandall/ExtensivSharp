@@ -1,12 +1,11 @@
-﻿using ExtensivSharp.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace ExtensivSharp.Services
+namespace ExtensivSharp.Models.Helper
 {
-    public static class HttpStatusCodeService
+    public static class HttpStatusCodeHelper
     {
         public static void SetResponseMessage<T>(HttpResponseMessage response, ExtensivApiResult<T> result, string responseContent)
         {

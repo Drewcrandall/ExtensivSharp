@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExtensivSharp.Models.Orders
+namespace ExtensivSharp.Models.Order
 {
-    public class Identifier
+#pragma warning disable CS8618
+    public class UnitIdentifier
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -10,4 +11,5 @@ namespace ExtensivSharp.Models.Orders
         [JsonProperty("id")]
         public int Id { get; set; }
     }
+
 }

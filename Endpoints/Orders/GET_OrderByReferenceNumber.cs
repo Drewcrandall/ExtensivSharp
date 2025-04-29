@@ -1,7 +1,6 @@
-﻿using ExtensivSharp.Entities;
-using ExtensivSharp.Models.Orders;
+﻿using ExtensivSharp.Models.Helper;
+using ExtensivSharp.Models.Order;
 using ExtensivSharp.RQL;
-using ExtensivSharp.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,11 +24,11 @@ namespace ExtensivSharp.Endpoints.Orders
 
             return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={rql}";
         }
-        public async Task<ExtensivApiResult<Order>> GetAsync()
+        public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync()
         {
             using (HttpClient client = new HttpClient())
             {
-                var result = new ExtensivApiResult<Order>()
+                var result = new ExtensivApiResult<Models.Order.Orders>()
                 {
                     Success = false
                 };
@@ -46,12 +45,12 @@ namespace ExtensivSharp.Endpoints.Orders
                 if (response.IsSuccessStatusCode)
                 {
                     result.Success = true;
-                    result.Data = JsonConvert.DeserializeObject<Order>(responseContent);
+                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent);
                     result.Message = "Order retrieved successfully.";
                 }
                 else
                 {
-                    HttpStatusCodeService.SetResponseMessage(response, result, responseContent);
+                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
                 }
                 return result;
             }

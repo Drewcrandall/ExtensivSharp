@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExtensivSharp.Models.Orders
+namespace ExtensivSharp.Models.Order
 {
     public enum SpecifyDetailType
     {

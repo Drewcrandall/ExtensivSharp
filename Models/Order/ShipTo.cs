@@ -1,9 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExtensivSharp.Models.Orders
+namespace ExtensivSharp.Models.Order
 {
-    public class BillTo
+#pragma warning disable CS8618
+    public class ShipTo
     {
+        [JsonProperty("retailerInfo")]
+        public RetailerInfo RetailerInfo { get; set; }
+
         [JsonProperty("sameAs")]
         public int SameAs { get; set; }
 

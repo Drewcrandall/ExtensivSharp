@@ -1,7 +1,6 @@
-﻿using ExtensivSharp.Entities;
-using ExtensivSharp.Models.Orders;
+﻿using ExtensivSharp.Models.Helper;
+using ExtensivSharp.Models.Order;
 using ExtensivSharp.RQL;
-using ExtensivSharp.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace ExtensivSharp.Endpoints.Orders
                 }
                 else
                 {
-                    HttpStatusCodeService.SetResponseMessage(response, result, responseContent);
+                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
                 }
                 return result;
             }

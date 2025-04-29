@@ -1,12 +1,16 @@
-﻿using ExtensivSharp.Models.Orders;
+﻿using ExtensivSharp.Models.Helper;
+using ExtensivSharp.Models.Order;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_Orders
     {
+        public string? AuthorizationToken { get; set; }
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
         public string? RqlFilter { get; set; }
@@ -49,6 +53,38 @@ namespace ExtensivSharp.Endpoints.Orders
                 query.Add($"skucontains={Uri.EscapeDataString(SkuContains)}");
 
             return $"https://secure-wms.com/orders?{string.Join("&", query)}";
+        }
+        public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var result = new ExtensivApiResult<Models.Order.Orders>()
+                {
+                    Success = false
+                };
+                var url = ToUrl();
+
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+
+                HttpResponseMessage response = await client.GetAsync(url);
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                result.StatusCode = response.StatusCode;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result.Success = true;
+                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent);
+                    result.Message = "Order retrieved successfully.";
+                    result.Etag = response.Headers.ETag?.Tag ?? null;
+                }
+                else
+                {
+                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                }
+                return result;
+            }
         }
     }
 }
