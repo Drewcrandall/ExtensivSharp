@@ -11,10 +11,10 @@ namespace ExtensivSharp.Endpoints.Orders
         public int? PageSize { get; set; }
         public string? RqlFilter { get; set; }
         public string? Sort { get; set; }
-        public SpecifyDetailType Detail { get; set; } = SpecifyDetailType.None
-        public SpecifyItemDetailType ItemDetail { get; set; } = SpecifyItemDetailType.None
+        public SpecifyDetailType Detail { get; set; } = SpecifyDetailType.None;
+        public SpecifyItemDetailType ItemDetail { get; set; } = SpecifyItemDetailType.None;
         public int? MarkForListId { get; set; }
-        public string? SkuList { get; set; }         // comma-separated SKUs
+        public string? SkuList { get; set; }// comma-separated SKUs
         public string? SkuContains { get; set; }
 
         public string ToUrl()
@@ -33,10 +33,10 @@ namespace ExtensivSharp.Endpoints.Orders
             if (!string.IsNullOrWhiteSpace(Sort))
                 query.Add($"sort={Uri.EscapeDataString(Sort)}");
 
-            if (Detail.HasValue)
+            if (Detail != SpecifyDetailType.None)
                 query.Add($"detail={Detail}");
 
-            if (ItemDetail.HasValue)
+            if (ItemDetail != SpecifyItemDetailType.None)
                 query.Add($"itemdetail={ItemDetail}");
 
             if (MarkForListId.HasValue)

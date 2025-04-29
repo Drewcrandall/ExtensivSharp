@@ -11,6 +11,7 @@ namespace ExtensivSharp.Entities
         public string? Message { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public T? Data { get; set; }
+        public string? Etag { get; set; }
 
         public bool IsSuccess() => Success;
         public bool IsUnauthorized() => StatusCode == HttpStatusCode.Unauthorized;
