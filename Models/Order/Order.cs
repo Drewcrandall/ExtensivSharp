@@ -15,7 +15,7 @@ namespace ExtensivSharp.Models.Order
         public string Notes { get; set; }
 
         [JsonProperty("numUnits1")]
-        public int NumUnits1 { get; set; }
+        public double NumUnits1 { get; set; }
 
         [JsonProperty("totalWeight")]
         public decimal TotalWeight { get; set; }
