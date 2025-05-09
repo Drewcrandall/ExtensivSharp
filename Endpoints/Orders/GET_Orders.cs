@@ -75,7 +75,7 @@ namespace ExtensivSharp.Endpoints.Orders
                 if (response.IsSuccessStatusCode)
                 {
                     result.Success = true;
-                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent);
+                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent)!;
                     result.Message = "Order retrieved successfully.";
                     result.Etag = response.Headers.ETag?.Tag ?? null;
                 }

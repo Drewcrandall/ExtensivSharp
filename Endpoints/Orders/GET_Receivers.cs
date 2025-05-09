@@ -1,5 +1,6 @@
 ﻿using ExtensivSharp.Models.Helper;
 using ExtensivSharp.Models.Order;
+using ExtensivSharp.Models.Receivers;
 using ExtensivSharp.RQL;
 using Newtonsoft.Json;
 using System;
@@ -9,26 +10,30 @@ using System.Text;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
-    public class GET_OrderByReferenceNumber
+    public class GET_Receivers
     {
         public string? AuthorizationToken { get; set; }
-        public string ReferenceNumber { get; set; } = string.Empty;
-        public SpecifyDetailType Detail { get; set; }
-        public SpecifyItemDetailType ItemDetail { get; set; }
+        public int? PageNumber { get; set; }
+        public int? PageSize { get; set; }
+        public string RqlFilter { get; set; } = string.Empty;
+        public string? Sort { get; set; }
+        public SpecifyItemDetailType Detail { get; set; } = SpecifyItemDetailType.None;
+        public int? PurchaseOrderId { get; set; }
+        public int? ReceiverType { get; set; }
 
-        private string ToUrl()
+        public string ToUrl()
         {
             var rql = new RqlQueryBuilder()
-                .Where("referenceNum", "==", ReferenceNumber)
+                .Where("serialNumber", "==", RqlFilter)
                 .Build();
 
-            return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={rql}";
+           return $"https://secure-wms.com/inventory/receivers/items?Detail={Detail}&rql={rql}";
         }
-        public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync()
+        public async Task<ExtensivApiResult<ReceiveItemResponse>> GetAsync()
         {
             using (HttpClient client = new HttpClient())
             {
-                var result = new ExtensivApiResult<Models.Order.Orders>()
+                var result = new ExtensivApiResult<ReceiveItemResponse>()
                 {
                     Success = false
                 };
@@ -45,8 +50,9 @@ namespace ExtensivSharp.Endpoints.Orders
                 if (response.IsSuccessStatusCode)
                 {
                     result.Success = true;
-                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent)!;
-                    result.Message = "Order retrieved successfully.";
+                    result.Data = JsonConvert.DeserializeObject<ReceiveItemResponse>(responseContent)!;
+                    result.Message = "ReceveItem retrieved successfully.";
+                    result.Etag = response.Headers.ETag?.Tag ?? null;
                 }
                 else
                 {
@@ -56,4 +62,5 @@ namespace ExtensivSharp.Endpoints.Orders
             }
         }
     }
+
 }

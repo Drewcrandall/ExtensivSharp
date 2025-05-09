@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExtensivSharp.Models.Order
+namespace ExtensivSharp.Models.Generic
 {
 #pragma warning disable CS8618
-    public class SavedElement
+    public class Identifier
     {
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("value")]
-        public string Value { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
     }
 }
