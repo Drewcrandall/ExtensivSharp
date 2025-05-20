@@ -23,35 +23,33 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<Order>> GetAsync()
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            var result = new ExtensivApiResult<Order>()
             {
-                var result = new ExtensivApiResult<Order>()
-                {
-                    Success = false
-                };
-                var url = ToUrl();
+                Success = false
+            };
+            var url = ToUrl();
 
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
 
-                HttpResponseMessage response = await client.GetAsync(url);
-                string responseContent = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string responseContent = await response.Content.ReadAsStringAsync();
 
-                result.StatusCode = response.StatusCode;
+            result.StatusCode = response.StatusCode;
 
-                if (response.IsSuccessStatusCode) 
-                {
-                    result.Success = true;
-                    result.Data = JsonConvert.DeserializeObject<Order>(responseContent);
-                    result.Message = "Order retrieved successfully.";
-                    result.Etag = response.Headers.ETag?.Tag ?? null;
-                }
-                else
-                {
-                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
-                }
-                return result;
+            if (response.IsSuccessStatusCode)
+            {
+                result.Success = true;
+                result.Data = JsonConvert.DeserializeObject<Order>(responseContent)!;
+                result.Message = "Order retrieved successfully.";
+                result.Etag = response.Headers.ETag?.Tag ?? null;
             }
+            else
+            {
+                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+            }
+            return result;
         }
     }
 }

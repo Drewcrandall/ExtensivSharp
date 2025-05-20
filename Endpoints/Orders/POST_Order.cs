@@ -4,25 +4,23 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
-    public class GET_OrderItem
+    public class POST_Order
     {
         public string? AuthorizationToken { get; set; }
-        public int OrderId { get; set; }
-        public int OrderItemId { get; set; }
-        public SpecifyItemDetailType Detail { get; set; } = SpecifyItemDetailType.None;
-
-        public string ToUrl()
+        public OrderCreate Order { get; set; } = new();
+        private static string ToUrl()
         {
-            return $"https://secure-wms.com/orders/{OrderId}/items/{OrderItemId}?detail={Detail}";
+            return $"https://secure-wms.com/orders";
         }
-        public async Task<ExtensivApiResult<OrderItem>> GetAsync()
+        public async Task<ExtensivApiResult<Order>> PostAsync()
         {
             using HttpClient client = new();
-            var result = new ExtensivApiResult<OrderItem>()
+            var result = new ExtensivApiResult<Order>()
             {
                 Success = false
             };
@@ -30,8 +28,10 @@ namespace ExtensivSharp.Endpoints.Orders
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            string JsonContent = JsonConvert.SerializeObject(Order);
+            var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.PostAsync(url, content);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             result.StatusCode = response.StatusCode;
@@ -39,8 +39,8 @@ namespace ExtensivSharp.Endpoints.Orders
             if (response.IsSuccessStatusCode)
             {
                 result.Success = true;
-                result.Data = JsonConvert.DeserializeObject<OrderItem>(responseContent)!;
-                result.Message = "OrderItem retrieved successfully.";
+                result.Data = JsonConvert.DeserializeObject<Order>(responseContent)!;
+                result.Message = "Order retrieved successfully.";
                 result.Etag = response.Headers.ETag?.Tag ?? null;
             }
             else

@@ -10,7 +10,7 @@ namespace ExtensivSharp.Models.Helper
         public bool Success { get; set; }
         public string? Message { get; set; }
         public HttpStatusCode StatusCode { get; set; }
-        public T Data { get; set; }
+        public T Data { get; set; } = default!;
         public string? Etag { get; set; }
 
         public bool IsSuccess() => Success;

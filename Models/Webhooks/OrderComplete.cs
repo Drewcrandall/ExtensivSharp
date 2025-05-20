@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ExtensivSharp.Models.Webhooks
 {
+#pragma warning disable CS8618
     public class OrderComplete
     {
         public int TplId { get; set; }
