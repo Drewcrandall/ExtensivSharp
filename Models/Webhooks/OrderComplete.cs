@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExtensivSharp.Models.Webhooks
+﻿namespace ExtensivSharp.Models.Webhooks
 {
 #pragma warning disable CS8618
     public class OrderComplete

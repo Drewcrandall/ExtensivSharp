@@ -1,7 +1,5 @@
 ﻿using ExtensivSharp.Models.Auth;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace ExtensivSharp.Services

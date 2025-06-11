@@ -1,9 +1,5 @@
 ﻿using ExtensivSharp.Models.Generic;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Text;
 
 namespace ExtensivSharp.Models.Receivers
 {

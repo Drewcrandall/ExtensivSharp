@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace ExtensivSharp.Models.Auth
 {
@@ -20,7 +18,8 @@ namespace ExtensivSharp.Models.Auth
         public string ClientId
         {
             get => _clientId;
-            set {
+            set
+            {
                 _clientId = value;
                 Key = GenerateKey();
             }

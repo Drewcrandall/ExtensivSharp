@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExtensivSharp.Models.Order
+﻿namespace ExtensivSharp.Models.Order
 {
     public enum SpecifyDetailType
     {

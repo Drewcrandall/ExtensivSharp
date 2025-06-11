@@ -3,10 +3,7 @@ using ExtensivSharp.Models.Order;
 using ExtensivSharp.Models.Receivers;
 using ExtensivSharp.RQL;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
-using System.Text;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
@@ -27,7 +24,7 @@ namespace ExtensivSharp.Endpoints.Orders
                 .Where("serialNumber", "==", RqlFilter)
                 .Build();
 
-           return $"https://secure-wms.com/inventory/receivers/items?Detail={Detail}&rql={rql}";
+            return $"https://secure-wms.com/inventory/receivers/items?Detail={Detail}&rql={rql}";
         }
         public async Task<ExtensivApiResult<ReceiveItemResponse>> GetAsync()
         {

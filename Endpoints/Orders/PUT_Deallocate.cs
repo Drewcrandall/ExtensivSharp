@@ -1,8 +1,4 @@
 ﻿using ExtensivSharp.Models.Helper;
-using ExtensivSharp.Models.Order;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -32,7 +28,7 @@ namespace ExtensivSharp.Endpoints.Orders
                 client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync(url,content);
+                HttpResponseMessage response = await client.PutAsync(url, content);
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 result.StatusCode = response.StatusCode;
