@@ -1,4 +1,6 @@
 ﻿using ExtensivSharp.Models.Helper;
+using ExtensivSharp.Models.Order;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -10,6 +12,7 @@ namespace ExtensivSharp.Endpoints.Orders
         public int OrderId { get; set; }
         public int OrderItemId { get; set; }
         public string? IsMatch { get; set; }
+        public OrderItem OrderItem { get; set; }
 
         public string ToUrl()
         {
@@ -28,7 +31,11 @@ namespace ExtensivSharp.Endpoints.Orders
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
                 client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
-                var content = new StringContent("{}", Encoding.UTF8, "application/json");
+                string json = JsonConvert.SerializeObject(OrderItem, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.PutAsync(url, content);
                 string responseContent = await response.Content.ReadAsStringAsync();
