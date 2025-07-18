@@ -13,7 +13,7 @@ namespace ExtensivSharp.Endpoints.Orders
         {
             return $"https://secure-wms.com/orders/{OrderId}/deallocator";
         }
-        public async Task<ExtensivApiResult<int>> GetAsync()
+        public async Task<ExtensivApiResult<int>> PutAsync()
         {
             using (HttpClient client = new HttpClient())
             {
