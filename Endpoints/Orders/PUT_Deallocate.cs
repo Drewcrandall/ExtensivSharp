@@ -6,6 +6,12 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class PUT_Deallocate
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public PUT_Deallocate(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public string? IsMatch { get; set; }
@@ -15,36 +21,35 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<int>> PutAsync()
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = _httpClientFactory.CreateClient();
+
+            var result = new ExtensivApiResult<int>()
             {
-                var result = new ExtensivApiResult<int>()
-                {
-                    Success = false
-                };
-                var url = ToUrl();
+                Success = false
+            };
+            var url = ToUrl();
 
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
-                client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
-                var content = new StringContent("{}", Encoding.UTF8, "application/json");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
+            var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync(url, content);
-                string responseContent = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await client.PutAsync(url, content);
+            string responseContent = await response.Content.ReadAsStringAsync();
 
-                result.StatusCode = response.StatusCode;
+            result.StatusCode = response.StatusCode;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    result.Success = true;
-                    result.Data = OrderId;
-                    result.Message = "Order Allocated successfully.";
-                }
-                else
-                {
-                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
-                }
-                return result;
+            if (response.IsSuccessStatusCode)
+            {
+                result.Success = true;
+                result.Data = OrderId;
+                result.Message = "Order Allocated successfully.";
             }
+            else
+            {
+                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+            }
+            return result;
         }
     }
 }

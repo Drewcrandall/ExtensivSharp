@@ -8,6 +8,12 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class POST_Order
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public POST_Order(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public OrderCreate Order { get; set; } = new();
         private static string ToUrl()
@@ -16,7 +22,7 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<Order>> PostAsync()
         {
-            using HttpClient client = new();
+            using HttpClient client = _httpClientFactory.CreateClient();
             var result = new ExtensivApiResult<Order>()
             {
                 Success = false

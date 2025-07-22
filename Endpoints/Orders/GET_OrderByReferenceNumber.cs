@@ -2,12 +2,19 @@
 using ExtensivSharp.Models.Order;
 using ExtensivSharp.RQL;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_OrderByReferenceNumber
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public GET_OrderByReferenceNumber(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public string ReferenceNumber { get; set; } = string.Empty;
         public SpecifyDetailType Detail { get; set; }
@@ -23,34 +30,34 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync()
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = _httpClientFactory.CreateClient();
+           
+            var result = new ExtensivApiResult<Models.Order.Orders>()
             {
-                var result = new ExtensivApiResult<Models.Order.Orders>()
-                {
-                    Success = false
-                };
-                var url = ToUrl();
+                Success = false
+            };
+            var url = ToUrl();
 
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
 
-                HttpResponseMessage response = await client.GetAsync(url);
-                string responseContent = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string responseContent = await response.Content.ReadAsStringAsync();
 
-                result.StatusCode = response.StatusCode;
+            result.StatusCode = response.StatusCode;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    result.Success = true;
-                    result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent)!;
-                    result.Message = "Order retrieved successfully.";
-                }
-                else
-                {
-                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
-                }
-                return result;
+            if (response.IsSuccessStatusCode)
+            {
+                result.Success = true;
+                result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent)!;
+                result.Message = "Order retrieved successfully.";
             }
+            else
+            {
+                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+            }
+            return result;
+            
         }
     }
 }

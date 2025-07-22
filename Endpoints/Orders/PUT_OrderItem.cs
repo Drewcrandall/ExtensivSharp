@@ -8,6 +8,12 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class PUT_OrderItem
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public PUT_OrderItem(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public int OrderItemId { get; set; }
@@ -20,40 +26,39 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<int>> PutAsync()
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = _httpClientFactory.CreateClient();
+
+            var result = new ExtensivApiResult<int>()
             {
-                var result = new ExtensivApiResult<int>()
-                {
-                    Success = false
-                };
-                var url = ToUrl();
+                Success = false
+            };
+            var url = ToUrl();
 
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
-                client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
-                string json = JsonConvert.SerializeObject(OrderItem, new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
+            string json = JsonConvert.SerializeObject(OrderItem, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PutAsync(url, content);
-                string responseContent = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await client.PutAsync(url, content);
+            string responseContent = await response.Content.ReadAsStringAsync();
 
-                result.StatusCode = response.StatusCode;
+            result.StatusCode = response.StatusCode;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    result.Success = true;
-                    result.Data = OrderItemId;
-                    result.Message = "OrderItem Updated successfully.";
-                }
-                else
-                {
-                    HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
-                }
-                return result;
+            if (response.IsSuccessStatusCode)
+            {
+                result.Success = true;
+                result.Data = OrderItemId;
+                result.Message = "OrderItem Updated successfully.";
             }
+            else
+            {
+                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+            }
+            return result;
         }
     }
 }

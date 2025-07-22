@@ -7,6 +7,12 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_OrderItem
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public GET_OrderByReferenceNumber(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public int OrderItemId { get; set; }

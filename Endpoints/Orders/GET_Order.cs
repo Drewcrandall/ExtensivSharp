@@ -7,6 +7,12 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_Order
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public GET_Order(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public SpecifyDetailType Detail { get; set; } = SpecifyDetailType.None;
@@ -17,7 +23,7 @@ namespace ExtensivSharp.Endpoints.Orders
         }
         public async Task<ExtensivApiResult<Order>> GetAsync()
         {
-            using HttpClient client = new();
+            using HttpClient client = _httpClientFactory.CreateClient();
             var result = new ExtensivApiResult<Order>()
             {
                 Success = false
