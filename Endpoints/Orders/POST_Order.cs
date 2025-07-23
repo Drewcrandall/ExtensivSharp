@@ -42,7 +42,8 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Success = false;
+                result.Message = responseContent;
             }
             return result;
         }
