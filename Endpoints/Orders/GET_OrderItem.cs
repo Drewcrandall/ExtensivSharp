@@ -9,7 +9,7 @@ namespace ExtensivSharp.Endpoints.Orders
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public GET_OrderByReferenceNumber(IHttpClientFactory httpClientFactory)
+        public GET_OrderItem(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
