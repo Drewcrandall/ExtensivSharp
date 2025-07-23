@@ -9,12 +9,6 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_Receivers
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public GET_Receivers(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
         public string? AuthorizationToken { get; set; }
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
@@ -32,9 +26,9 @@ namespace ExtensivSharp.Endpoints.Orders
 
             return $"https://secure-wms.com/inventory/receivers/items?Detail={Detail}&rql={rql}";
         }
-        public async Task<ExtensivApiResult<ReceiveItemResponse>> GetAsync()
+        public async Task<ExtensivApiResult<ReceiveItemResponse>> GetAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            using HttpClient client = factory.CreateClient();
 
             var result = new ExtensivApiResult<ReceiveItemResponse>()
             {

@@ -8,21 +8,15 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class POST_Order
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public POST_Order(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
         public string? AuthorizationToken { get; set; }
         public OrderCreate Order { get; set; } = new();
         private static string ToUrl()
         {
             return $"https://secure-wms.com/orders";
         }
-        public async Task<ExtensivApiResult<Order>> PostAsync()
+        public async Task<ExtensivApiResult<Order>> PostAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            using HttpClient client = factory.CreateClient();
             var result = new ExtensivApiResult<Order>()
             {
                 Success = false

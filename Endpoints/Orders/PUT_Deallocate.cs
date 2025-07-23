@@ -6,12 +6,6 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class PUT_Deallocate
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public PUT_Deallocate(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public string? IsMatch { get; set; }
@@ -19,9 +13,9 @@ namespace ExtensivSharp.Endpoints.Orders
         {
             return $"https://secure-wms.com/orders/{OrderId}/deallocator";
         }
-        public async Task<ExtensivApiResult<int>> PutAsync()
+        public async Task<ExtensivApiResult<int>> PutAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            using HttpClient client = factory.CreateClient();
 
             var result = new ExtensivApiResult<int>()
             {

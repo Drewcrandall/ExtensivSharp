@@ -14,9 +14,9 @@ namespace ExtensivSharp.Endpoints.Inventory.EditTrackBys
         {
             return $"https://secure-wms.com/orders";
         }
-        public async Task<ExtensivApiResult<ReceiveItemPutRequest>> PostAsync()
+        public async Task<ExtensivApiResult<ReceiveItemPutRequest>> PostAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = new();
+            using HttpClient client = factory.CreateClient();
             var result = new ExtensivApiResult<ReceiveItemPutRequest>()
             {
                 Success = false

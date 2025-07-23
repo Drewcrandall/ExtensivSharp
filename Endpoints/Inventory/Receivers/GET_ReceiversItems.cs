@@ -15,9 +15,9 @@ namespace ExtensivSharp.Endpoints.Inventory.Receivers
         {
             return $"https://secure-wms.com/inventory/receivers/{ReceiverId}/items?detail={Detail}";
         }
-        public async Task<ExtensivApiResult<List<ReceiveItem>>> GetAsync()
+        public async Task<ExtensivApiResult<List<ReceiveItem>>> GetAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = new();
+            using HttpClient client = factory.CreateClient();
             var result = new ExtensivApiResult<List<ReceiveItem>>()
             {
                 Success = false

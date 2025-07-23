@@ -7,12 +7,6 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class GET_Order
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public GET_Order(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public SpecifyDetailType Detail { get; set; } = SpecifyDetailType.None;
@@ -21,9 +15,9 @@ namespace ExtensivSharp.Endpoints.Orders
         {
             return $"https://secure-wms.com/orders/{OrderId}?detail={Detail}&itemdetail={ItemDetail}";
         }
-        public async Task<ExtensivApiResult<Order>> GetAsync()
+        public async Task<ExtensivApiResult<Order>> GetAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            using HttpClient client = factory.CreateClient();
             var result = new ExtensivApiResult<Order>()
             {
                 Success = false

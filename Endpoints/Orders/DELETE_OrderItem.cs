@@ -6,12 +6,6 @@ namespace ExtensivSharp.Endpoints.Orders
 {
     public class DELETE_OrderItem
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public DELETE_OrderItem(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
         public string? AuthorizationToken { get; set; }
         public int OrderId { get; set; }
         public int OrderItemId { get; set; }
@@ -21,9 +15,9 @@ namespace ExtensivSharp.Endpoints.Orders
         {
             return $"https://secure-wms.com/orders/{OrderId}/items/{OrderItemId}";
         }
-        public async Task<ExtensivApiResult<int>> DeleteAsync()
+        public async Task<ExtensivApiResult<int>> DeleteAsync(IHttpClientFactory factory)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            using HttpClient client = factory.CreateClient();
             
             var result = new ExtensivApiResult<int>()
             {
