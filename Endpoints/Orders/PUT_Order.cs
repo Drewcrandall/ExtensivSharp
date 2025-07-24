@@ -1,41 +1,39 @@
 ﻿using ExtensivSharp.Models.Helper;
 using ExtensivSharp.Models.Order;
-using ExtensivSharp.RQL;
 using Newtonsoft.Json;
-using System.Net.Http;
+using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace ExtensivSharp.Endpoints.Orders
 {
-    public class GET_OrderByReferenceNumber
+    public class PUT_Order
     {
         public string? AuthorizationToken { get; set; }
-        public string ReferenceNumber { get; set; } = string.Empty;
-        public SpecifyDetailType Detail { get; set; }
-        public SpecifyItemDetailType ItemDetail { get; set; }
-
-        private string ToUrl()
+        public OrderCreate Order { get; set; } = new();
+        public int OrderId { get; set; }
+        public string? IsMatch { get; set; }
+        private static string ToUrl(int orderId)
         {
-            var rql = new RqlQueryBuilder()
-                .Where("referenceNum", "==", ReferenceNumber)
-                .Build();
-
-            return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={rql}";
+            return $"https://secure-wms.com/orders/{orderId}";
         }
-        public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync(IHttpClientFactory factory)
+        public async Task<ExtensivApiResult<Order>> PutAsync(IHttpClientFactory factory)
         {
             using HttpClient client = factory.CreateClient();
-           
-            var result = new ExtensivApiResult<Models.Order.Orders>()
+            var result = new ExtensivApiResult<Order>()
             {
                 Success = false
             };
-            var url = ToUrl();
+            var url = ToUrl(OrderId);
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
+            client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
+            string JsonContent = JsonConvert.SerializeObject(Order);
+            var content = new StringContent(JsonContent, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.PutAsync(url, content);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             result.StatusCode = response.StatusCode;
@@ -43,16 +41,16 @@ namespace ExtensivSharp.Endpoints.Orders
             if (response.IsSuccessStatusCode)
             {
                 result.Success = true;
-                result.Data = JsonConvert.DeserializeObject<Models.Order.Orders>(responseContent)!;
+                result.Data = JsonConvert.DeserializeObject<Order>(responseContent)!;
                 result.Message = "Order retrieved successfully.";
                 result.Etag = response.Headers.ETag?.Tag ?? null;
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Success = false;
+                result.Message = responseContent;
             }
             return result;
-            
         }
     }
 }
