@@ -29,6 +29,10 @@ namespace ExtensivSharp.Models.Order
 
         [JsonProperty("pickStarted")]
         public bool PickStarted { get; set; }
+        [JsonProperty("pickDoneDate")]
+        public DateTime PickDoneDate { get; set; }
+        [JsonProperty("packDoneDate")]
+        public DateTime PackDoneDate { get; set; }
 
         [JsonProperty("packStarted")]
         public bool PackStarted { get; set; }
