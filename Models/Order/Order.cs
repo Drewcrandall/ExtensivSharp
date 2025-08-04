@@ -52,7 +52,7 @@ namespace ExtensivSharp.Models.Order
         public Identifier Unit1Identifier { get; set; }
 
         [JsonProperty("numUnits2")]
-        public int NumUnits2 { get; set; }
+        public double NumUnits2 { get; set; }
 
         [JsonProperty("unit2Identifier")]
         public Identifier Unit2Identifier { get; set; }
