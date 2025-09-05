@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExtensivSharp.Models.Order
+namespace ExtensivSharp.Models.Generic
 {
 #pragma warning disable CS8618
     public class ItemIdentifier
