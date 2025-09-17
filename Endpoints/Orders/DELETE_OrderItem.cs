@@ -18,7 +18,7 @@ namespace ExtensivSharp.Endpoints.Orders
         public async Task<ExtensivApiResult<int>> DeleteAsync(IHttpClientFactory factory)
         {
             using HttpClient client = factory.CreateClient();
-            
+
             var result = new ExtensivApiResult<int>()
             {
                 Success = false
@@ -45,7 +45,7 @@ namespace ExtensivSharp.Endpoints.Orders
             {
                 HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
             }
-            return result;            
+            return result;
         }
     }
 }

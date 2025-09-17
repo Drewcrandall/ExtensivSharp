@@ -1,8 +1,4 @@
-﻿using ExtensivSharp.Models.Order;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace ExtensivSharp.Models.Generic
 {

@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using ExtensivSharp.Models.Generic;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ExtensivSharp.Models.Generic;
+using Newtonsoft.Json;
 
 namespace ExtensivSharp.Models.Items
 {

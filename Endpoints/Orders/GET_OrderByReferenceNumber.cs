@@ -2,7 +2,6 @@
 using ExtensivSharp.Models.Order;
 using ExtensivSharp.RQL;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace ExtensivSharp.Endpoints.Orders
@@ -25,7 +24,7 @@ namespace ExtensivSharp.Endpoints.Orders
         public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync(IHttpClientFactory factory)
         {
             using HttpClient client = factory.CreateClient();
-           
+
             var result = new ExtensivApiResult<Models.Order.Orders>()
             {
                 Success = false
@@ -52,7 +51,7 @@ namespace ExtensivSharp.Endpoints.Orders
                 HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
             }
             return result;
-            
+
         }
     }
 }
