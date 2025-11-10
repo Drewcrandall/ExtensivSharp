@@ -37,7 +37,7 @@ namespace ExtensivSharp.Endpoints.Orders
             {
                 result.Success = true;
                 result.Data = OrderId;
-                result.Message = "Order Allocated successfully.";
+                result.Message = "Order deallocated successfully.";
             }
             else
             {
