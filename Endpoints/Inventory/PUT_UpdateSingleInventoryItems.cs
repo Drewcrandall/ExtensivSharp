@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace ExtensivSharp.Endpoints.Inventory.EditTrackBys
+namespace ExtensivSharp.Endpoints.Inventory
 {
-    class PUT_UpdateSingleInventoryItems
+    public class PUT_UpdateSingleInventoryItems
     {
         public string? AuthorizationToken { get; set; }
         public ReceiveItemPutRequest UpdateTrackBy { get; set; } = new();
