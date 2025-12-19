@@ -1,0 +1,61 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ExtensivSharp.Models.Inventory
+{
+    public class Supplier
+    {
+        [JsonProperty("contactId")]
+        public int ContactId { get; set; }
+
+        [JsonProperty("companyName")]
+        public string CompanyName { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("address1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("state")]
+        public string State { get; set; }
+
+        [JsonProperty("zip")]
+        public string Zip { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+
+        [JsonProperty("phoneNumber")]
+        public string PhoneNumber { get; set; }
+
+        [JsonProperty("fax")]
+        public string Fax { get; set; }
+
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("dept")]
+        public string Dept { get; set; }
+
+        [JsonProperty("isAddressResidential")]
+        public bool IsAddressResidential { get; set; }
+
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
+        [JsonProperty("addressStatus")]
+        public int AddressStatus { get; set; }
+    }
+}

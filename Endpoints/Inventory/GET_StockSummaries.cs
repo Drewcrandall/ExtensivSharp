@@ -1,36 +1,40 @@
 ﻿using ExtensivSharp.Models.Helper;
-using ExtensivSharp.Models.Order;
+using ExtensivSharp.Models.Inventory;
 using ExtensivSharp.Models.Receivers;
-using ExtensivSharp.RQL;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Text;
 
-namespace ExtensivSharp.Endpoints.Orders
+namespace ExtensivSharp.Endpoints.Inventory
 {
-    public class GET_Receivers
+    public class GET_StockSummaries
     {
         public string? AuthorizationToken { get; set; }
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
-        public string RqlFilter { get; set; } = string.Empty;
-        public string? Sort { get; set; }
-        public SpecifyItemDetailType Detail { get; set; } = SpecifyItemDetailType.None;
-        public int? PurchaseOrderId { get; set; }
-        public int? ReceiverType { get; set; }
+        public string? RqlFilter { get; set; }
 
         public string ToUrl()
         {
-            var rql = new RqlQueryBuilder()
-                .Where("serialNumber", "==", RqlFilter)
-                .Build();
+            var query = new List<string>();
 
-            return $"https://secure-wms.com/inventory/receivers/items?Detail={Detail}&rql={rql}";
+            if (PageSize.HasValue)
+                query.Add($"pgsiz={PageSize.Value}");
+
+            if (PageNumber.HasValue)
+                query.Add($"pgnum={PageNumber.Value}");
+
+            if (!string.IsNullOrWhiteSpace(RqlFilter))
+                query.Add($"rql={Uri.EscapeDataString(RqlFilter)}");
+
+            return $"https://secure-wms.com/inventory/stocksummaries?{string.Join("&", query)}";
         }
-        public async Task<ExtensivApiResult<ReceiveItemResponse>> GetAsync(IHttpClientFactory factory)
+        public async Task<ExtensivApiResult<StockSummaryList>> GetAsync(IHttpClientFactory factory)
         {
             using HttpClient client = factory.CreateClient();
-
-            var result = new ExtensivApiResult<ReceiveItemResponse>()
+            var result = new ExtensivApiResult<StockSummaryList>()
             {
                 Success = false
             };
@@ -47,8 +51,8 @@ namespace ExtensivSharp.Endpoints.Orders
             if (response.IsSuccessStatusCode)
             {
                 result.Success = true;
-                result.Data = JsonConvert.DeserializeObject<ReceiveItemResponse>(responseContent)!;
-                result.Message = "ReceveItem retrieved successfully.";
+                result.Data = JsonConvert.DeserializeObject<StockSummaryList>(responseContent)!;
+                result.Message = "StockStatus retrieved successfully.";
                 result.Etag = response.Headers.ETag?.Tag ?? null;
             }
             else
@@ -57,6 +61,6 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             return result;
         }
+        
     }
-
 }

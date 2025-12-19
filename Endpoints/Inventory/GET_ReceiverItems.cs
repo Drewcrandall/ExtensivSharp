@@ -3,9 +3,12 @@ using ExtensivSharp.Models.Receivers;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
-namespace ExtensivSharp.Endpoints.Inventory.Receivers
+namespace ExtensivSharp.Endpoints.Inventory
 {
-    class GET_ReceiversItems
+    /// <summary>
+    /// Returns all line items,includes item details, of a specific Receiver.
+    /// </summary>
+    public class GET_ReceiverItems
     {
         public string? AuthorizationToken { get; set; }
         public int ReceiverId { get; set; }
