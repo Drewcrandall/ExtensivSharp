@@ -5,14 +5,10 @@ using System.Net.Http.Headers;
 
 namespace ExtensivSharp.Endpoints.Inventory
 {
-<<<<<<<< HEAD:Endpoints/Inventory/GET_ReceiverItems.cs
     /// <summary>
     /// Returns all line items,includes item details, of a specific Receiver.
     /// </summary>
     public class GET_ReceiverItems
-========
-    public class GET_ReceiverItem
->>>>>>>> f307ae6b5180f98145aae8aa7b8b71d77ca8fef3:Endpoints/Inventory/GET_ReceiverItem.cs
     {
         public string? AuthorizationToken { get; set; }
         public int ReceiverId { get; set; }
