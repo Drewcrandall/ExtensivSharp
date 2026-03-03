@@ -124,6 +124,7 @@ var getOrders = new GET_Orders
 | Class | Description |
 |-------|-------------|
 | `GET_Items` | Retrieve item master data |
+| `GET_Aliases` | Retrieve item aliases |
 
 ## Project Structure
 
