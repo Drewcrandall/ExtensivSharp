@@ -165,7 +165,7 @@ public class ExtensivApiResult<T>
 
 ## API Documentation
 
-For full API documentation, refer to the [Extensiv API Reference](https://developer.extensiv.com/).
+For full API documentation, refer to the [Extensiv API Reference](https://developer.extensiv.com/) or [REL](https://3w.extensiv.com/rels/) documentation
 
 ## License
 
