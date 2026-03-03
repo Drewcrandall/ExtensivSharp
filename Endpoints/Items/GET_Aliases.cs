@@ -1,5 +1,4 @@
 ﻿using ExtensivSharp.Models.Helper;
-using ExtensivSharp.Models.Items;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
