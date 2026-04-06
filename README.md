@@ -118,7 +118,7 @@ var getOrders = new GET_Orders
 | `GET_Receivers` | Get receiver records |
 | `GET_ReceiverItems` | Get items on a receiver |
 | `GET_ReceiveItems` | Get received items |
-| `PUT_UpdateSingleInventoryItems` | Update inventory item details |
+| `PUT_Shaker` | Update inventory track-by details (lot number, serial number, expiration date) |
 
 ### Items
 | Class | Description |
@@ -171,3 +171,7 @@ For full API documentation, refer to the [Extensiv API Reference](https://develo
 ## License
 
 MIT License
+
+---
+
+*Last Modified: 2026-04-06*
