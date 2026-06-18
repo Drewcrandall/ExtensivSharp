@@ -23,7 +23,7 @@ namespace ExtensivSharp.Endpoints.Properties
             };
             var url = ToUrl();
 
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
 
             HttpResponseMessage response = await client.GetAsync(url);
