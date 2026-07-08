@@ -17,7 +17,9 @@ A C# client library for the [Extensiv](https://extensiv.com/) (formerly 3PL Cent
 
 ## Installation
 
-Add a reference to the project or include it in your solution.
+```
+dotnet add package ExtensivSharp
+```
 
 ## Dependencies
 
