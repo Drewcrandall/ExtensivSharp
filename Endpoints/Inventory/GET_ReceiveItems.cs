@@ -17,6 +17,11 @@ namespace ExtensivSharp.Endpoints.Inventory
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
         public string RqlFilter { get; set; } = string.Empty;
+        /// <summary>
+        /// Optional batch form of <see cref="RqlFilter"/>. When set, the serials are searched in one
+        /// call via <c>serialNumber=in=(...)</c> and <see cref="RqlFilter"/> is ignored.
+        /// </summary>
+        public List<string>? SerialNumbers { get; set; }
         public string? Sort { get; set; }
         public ReceiveItemChildren Detail { get; set; } = ReceiveItemChildren.None;
         public bool? IncludeInventoryLevels { get; set; }
@@ -31,7 +36,11 @@ namespace ExtensivSharp.Endpoints.Inventory
             if (PageNumber.HasValue)
                 query.Add($"pgnum={PageNumber.Value}");
 
-            if (!string.IsNullOrWhiteSpace(RqlFilter))
+            if (SerialNumbers != null && SerialNumbers.Count > 0)
+                query.Add($"rql={Uri.EscapeDataString(new RqlQueryBuilder()
+                                                        .In("serialNumber", SerialNumbers.ToArray())
+                                                        .Build())}");
+            else if (!string.IsNullOrWhiteSpace(RqlFilter))
                 query.Add($"rql={Uri.EscapeDataString(new RqlQueryBuilder()
                                                         .Where("serialNumber", "==", RqlFilter)
                                                         .Build())}");
