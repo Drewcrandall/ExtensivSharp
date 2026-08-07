@@ -106,6 +106,7 @@ var getOrders = new GET_Orders
 | `GET_OrderByReferenceNumber` | Get an order by reference number |
 | `GET_OrderItem` | Get order line items |
 | `POST_Order` | Create a new order |
+| `POST_OrderItem` | Add a new line item to an existing order |
 | `PUT_Order` | Update an existing order |
 | `PUT_OrderItem` | Update order line items |
 | `PUT_Allocate` | Allocate inventory to an order |
