@@ -1,4 +1,4 @@
-﻿namespace ExtensivSharp.RQL
+namespace ExtensivSharp.RQL
 {
     public class RqlQueryBuilder
     {
@@ -37,6 +37,10 @@
             return this;
         }
 
+        /// <summary>
+        /// Returns the raw RQL expression. This is not URL encoded - pass it through
+        /// <see cref="Uri.EscapeDataString(string)"/> exactly once when placing it in a query string.
+        /// </summary>
         public string Build()
         {
             var andSegment = string.Join(";", _andClauses);
@@ -46,9 +50,18 @@
             return andSegment + orSegment;
         }
 
-        private string Escape(string value)
+        /// <summary>
+        /// Applies RQL-level escaping to a predicate value, per the "Character Escape Sequences"
+        /// rules in Extensiv's RQL documentation. This is deliberately NOT URL encoding: it converts
+        /// the eight RQL-significant characters to percent sequences so the server's RQL parser sees
+        /// them as data rather than syntax. The single URL encode applied by the calling endpoint
+        /// then turns each "%" into "%25", which is exactly the two-layer form the documentation
+        /// specifies (intent x;y -> RQL x%3By -> wire x%253By).
+        /// Note "*" is escaped, so values always match literally; the builder has no wildcard syntax.
+        /// </summary>
+        private static string Escape(string value)
         {
-            return Uri.EscapeDataString(value
+            return value
                 .Replace("%", "%25")
                 .Replace("!", "%21")
                 .Replace("(", "%28")
@@ -56,8 +69,7 @@
                 .Replace("*", "%2A")
                 .Replace("=", "%3D")
                 .Replace(",", "%2C")
-                .Replace(";", "%3B")
-            );
+                .Replace(";", "%3B");
         }
     }
 

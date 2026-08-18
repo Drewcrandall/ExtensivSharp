@@ -42,8 +42,9 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             else
             {
-                result.Success = false;
-                result.Message = responseContent;
+                result.Message = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase
+                    : responseContent;
             }
             return result;
         }
