@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <PackageId>ExtensivSharp</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Authors>Drew Crandall</Authors>
     <Description>A C# client library for the Extensiv (formerly 3PL Central) Warehouse Management System REST API. Includes OAuth authentication, strongly-typed models, and a fluent RQL query builder.</Description>
     <PackageTags>extensiv;3pl-central;wms;warehouse;api-client</PackageTags>
