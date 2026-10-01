@@ -10,14 +10,23 @@ namespace ExtensivSharp.Endpoints.Orders
     {
         public string? AuthorizationToken { get; set; }
         public string ReferenceNumber { get; set; } = string.Empty;
+        /// <summary>
+        /// When set, also requires <c>readOnly.customerIdentifier.id==&lt;id&gt;</c> so a reference number
+        /// that collides across customers can only resolve to this customer's order.
+        /// </summary>
+        public int? CustomerIdentifierId { get; set; }
         public SpecifyDetailType Detail { get; set; }
         public SpecifyItemDetailType ItemDetail { get; set; }
 
         private string ToUrl()
         {
-            var rql = new RqlQueryBuilder()
-                .Where("referenceNum", "==", ReferenceNumber)
-                .Build();
+            var builder = new RqlQueryBuilder()
+                .Where("referenceNum", "==", ReferenceNumber);
+
+            if (CustomerIdentifierId.HasValue)
+                builder.Where("readOnly.customerIdentifier.id", "==", CustomerIdentifierId.Value.ToString());
+
+            var rql = builder.Build();
 
             return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={rql}";
         }

@@ -20,6 +20,12 @@ namespace ExtensivSharp.Endpoints.Inventory
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
         public string? RqlFilter { get; set; }
+        /// <summary>
+        /// When set, restricts the result to a single Extensiv customer by AND-ing
+        /// <c>readOnly.customerIdentifier.id==&lt;id&gt;</c> into the RQL filter. Required for per-customer
+        /// siloing now that one service account returns every customer's receivers.
+        /// </summary>
+        public int? CustomerIdentifierId { get; set; }
         public string? Sort { get; set; }
         public ReceiverChildren Detail { get; set; } = ReceiverChildren.None;
         public ReceiveItemChildren ItemDetail { get; set; } = ReceiveItemChildren.None;
@@ -35,8 +41,14 @@ namespace ExtensivSharp.Endpoints.Inventory
             if (PageNumber.HasValue)
                 query.Add($"pgnum={PageNumber.Value}");
 
-            if (!string.IsNullOrWhiteSpace(RqlFilter))
-                query.Add($"rql={Uri.EscapeDataString(RqlFilter)}");
+            var effectiveRql = CustomerIdentifierId.HasValue
+                ? (string.IsNullOrWhiteSpace(RqlFilter)
+                    ? $"readOnly.customerIdentifier.id=={CustomerIdentifierId.Value}"
+                    : $"{RqlFilter};readOnly.customerIdentifier.id=={CustomerIdentifierId.Value}")
+                : RqlFilter;
+
+            if (!string.IsNullOrWhiteSpace(effectiveRql))
+                query.Add($"rql={Uri.EscapeDataString(effectiveRql)}");
 
             if (!string.IsNullOrWhiteSpace(Sort))
                 query.Add($"sort={Uri.EscapeDataString(Sort)}");
