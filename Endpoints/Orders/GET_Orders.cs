@@ -90,7 +90,9 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Message = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase
+                    : responseContent;
             }
             return result;
         }

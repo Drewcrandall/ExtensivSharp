@@ -47,7 +47,8 @@ namespace ExtensivSharp.Endpoints.Orders
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
-            client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
+            if (!string.IsNullOrWhiteSpace(IsMatch))
+                client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch, true));
             string json = JsonConvert.SerializeObject(OrderItem, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -68,7 +69,9 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Message = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase
+                    : responseContent;
             }
             return result;
         }

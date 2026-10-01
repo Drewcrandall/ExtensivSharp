@@ -27,7 +27,8 @@ namespace ExtensivSharp.Endpoints.Orders
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthorizationToken);
-            client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch ?? string.Empty, true));
+            if (!string.IsNullOrWhiteSpace(IsMatch))
+                client.DefaultRequestHeaders.IfMatch.Add(new EntityTagHeaderValue(IsMatch, true));
             var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.DeleteAsync(url);
@@ -40,10 +41,13 @@ namespace ExtensivSharp.Endpoints.Orders
                 result.Success = true;
                 result.Data = OrderItemId;
                 result.Message = "OrderItem Deleted successfully.";
+                result.Etag = response.Headers.ETag?.Tag;
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Message = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase
+                    : responseContent;
             }
             return result;
         }

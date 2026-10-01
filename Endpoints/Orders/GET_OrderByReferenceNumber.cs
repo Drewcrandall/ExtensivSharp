@@ -28,7 +28,7 @@ namespace ExtensivSharp.Endpoints.Orders
 
             var rql = builder.Build();
 
-            return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={rql}";
+            return $"https://secure-wms.com/orders?detail={Detail}&itemdetail={ItemDetail}&rql={Uri.EscapeDataString(rql)}";
         }
         public async Task<ExtensivApiResult<Models.Order.Orders>> GetAsync(IHttpClientFactory factory)
         {
@@ -57,7 +57,9 @@ namespace ExtensivSharp.Endpoints.Orders
             }
             else
             {
-                HttpStatusCodeHelper.SetResponseMessage(response, result, responseContent);
+                result.Message = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase
+                    : responseContent;
             }
             return result;
 

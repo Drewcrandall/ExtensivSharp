@@ -1,4 +1,5 @@
 ﻿using ExtensivSharp.Models.Generic;
+using Newtonsoft.Json;
 
 namespace ExtensivSharp.Models.Order
 {
@@ -16,5 +17,7 @@ namespace ExtensivSharp.Models.Order
         public ShipToCreate ShipTo { get; set; }
         public SoldToCreate SoldTo { get; set; }
         public List<OrderItem> OrderItems { get; set; }
+        [JsonProperty("savedElements", NullValueHandling = NullValueHandling.Ignore)]
+        public List<SavedElement>? SavedElements { get; set; }
     }
 }
