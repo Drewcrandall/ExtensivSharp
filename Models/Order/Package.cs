@@ -58,14 +58,25 @@ namespace ExtensivSharp.Models.Order
         public EmbeddedPackageContents Embedded { get; set; }
 
         /// <summary>
-        /// The package's contents. Extensiv carries these under "_embedded" on both requests and
-        /// responses, so this projects onto <see cref="Embedded"/> rather than being a wire property
-        /// in its own right.
+        /// Contents as a direct array, which is how the order-detail endpoints return them
+        /// (GET /orders with detail=Packages). The picking endpoints instead nest contents under
+        /// "_embedded" (<see cref="Embedded"/>); <see cref="PackageContents"/> reads whichever is present.
+        /// Null-ignored on serialize so it never pollutes a picking create/update body.
+        /// </summary>
+        [JsonProperty("packageContents", NullValueHandling = NullValueHandling.Ignore)]
+        public List<PackageContent> DirectPackageContents { get; set; }
+
+        /// <summary>
+        /// The package's contents. Reads the direct "packageContents" array (order-detail responses) when
+        /// present, otherwise the "_embedded" form (picking responses). Setting writes the "_embedded"
+        /// form, which is what the picking create/update calls serialize.
         /// </summary>
         [JsonIgnore]
         public List<PackageContent> PackageContents
         {
-            get => Embedded?.PackageContents ?? new();
+            get => (DirectPackageContents != null && DirectPackageContents.Count > 0)
+                ? DirectPackageContents
+                : (Embedded?.PackageContents ?? new());
             set => Embedded = new EmbeddedPackageContents { PackageContents = value };
         }
     }
